@@ -1,0 +1,102 @@
+
+#Bit manipulation
+231. Power of Two
+Solved
+Easy
+Topics
+premium lock icon
+Companies
+Given an integer n, return true if it is a power of two. Otherwise, return false.
+
+An integer n is a power of two, if there exists an integer x such that n == 2x.
+
+ 
+
+Example 1:
+
+Input: n = 1
+Output: true
+Explanation: 20 = 1
+Example 2:
+
+Input: n = 16
+Output: true
+Explanation: 24 = 16
+Example 3:
+
+Input: n = 3
+Output: false
+ 
+
+Constraints:
+
+-231 <= n <= 231 - 1
+
+
+solution:
+#1(without loops and recursion) 
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        
+        if(n<=0){
+            return false;
+        }
+        
+        return (n & (n-1))==0; 
+
+        // power of two always has only one 1 at most significant bit and rest zero.
+        //ex- 2^1 = 2 ->10 , 2^2 = 4 -> 100 , 2^3 = 8->1000
+        //also (pow of 2)-1 has all the  bits 1 except the msb which is 0
+        ex- 2=> 2-1=1 ->01 ,  4=> 4-1=3 ->011 , 8-1=7=>0111
+
+        //hence if we take bitwise and (&) of this both we will get zero , which will prove that the number is power that
+        //n is in power of 2 this is why on doing & with n-1 it is giving 0
+        
+    }
+};
+
+#2(recursion)
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) { 
+        
+        if(n<=0){
+            return false;
+        }
+        if(n==1){
+            return true;
+        }
+        if(n%2!=0){
+            return false;
+        }
+        
+        return isPowerOfTwo(n/2); 
+        
+    }
+};
+
+#3(brute -force) 
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        long long int pow = 1;
+        if(n==1){
+            return true;
+        }
+        while(true){
+            pow=pow*2;
+            if(pow == n){
+                return true;
+            }
+            else{
+                if(pow>n){
+                    return false;
+                }
+            }
+        }
+        
+    }
+};
