@@ -1,0 +1,42 @@
+You need to remove duplicate in the array and return  the array by keeping order preserved.
+ex - [1,2,1,3,3,4,5,2] -> [1,2,3,4,5]
+
+
+// brute force approach (t.c =O(n^2))
+vector<int> removeDuplicatesBrute(vector<int>& arr) {
+    vector<int> result;
+
+    for (int i = 0; i < arr.size(); i++) {
+        bool foundBefore = false;
+
+        // Check if arr[i] appeared earlier
+        for (int j = 0; j < i; j++) {
+            if (arr[i] == arr[j]) {
+                foundBefore = true;
+                break;
+            }
+        }
+
+        if (!foundBefore) {
+            result.push_back(arr[i]);
+        }
+    }
+
+    return result;
+}
+
+// Optimal approach (t.c = O(n), using unorederd_set)
+
+vector<int> removeDuplicatesOptimal(vector<int>& arr) {
+    unordered_set<int> seen;
+    vector<int> result;
+
+    for (int x : arr) {
+        if (seen.find(x) == seen.end()) {
+            result.push_back(x);
+            seen.insert(x);
+        }
+    }
+
+    return result;
+}
