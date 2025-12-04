@@ -118,6 +118,8 @@ If it’s new:
 If at capacity: remove the leftmost real node (LRU).
 Insert the new node at the right.
 
+video- https://neetcode.io/solutions/lru-cache
+
 
 class Node{
 public:
