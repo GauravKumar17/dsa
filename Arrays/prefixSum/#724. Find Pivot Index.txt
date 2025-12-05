@@ -37,7 +37,7 @@ Constraints:
 1 <= nums.length <= 104
 -1000 <= nums[i] <= 1000
 
-//solution(Brute Force -O(n))
+//solution(Prefix sum -O(1))
 class Solution {
 public:
     int pivotIndex(vector<int>& nums) {
