@@ -1,0 +1,120 @@
+Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
+
+The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+
+You must write an algorithm that runs in O(n) time and without using the division operation.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3,4]
+Output: [24,12,8,6]
+Example 2:
+
+Input: nums = [-1,1,0,-3,3]
+Output: [0,0,9,0,0]
+ 
+
+Constraints:
+
+2 <= nums.length <= 105
+-30 <= nums[i] <= 30
+The input is generated such that answer[i] is guaranteed to fit in a 32-bit integer.
+ 
+
+Follow up: Can you solve the problem in O(1) extra space complexity? (The output array does not count as extra space for space complexity analysis.)
+
+Solution :-
+
+1.(T.c=>O(n^2)) [TLE]
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n = nums.size();
+        vector<int>ans(n);
+
+         for(int i=0;i<n;i++){
+             int mul = 1;
+             for(int j=0;j<n;j++){
+                 if(i!=j){
+                     mul*=nums[j];
+                }
+            }
+             ans[i]=mul;
+
+
+         }
+         return ans;
+    }
+}
+
+2.[Slight optimal => T.c(O(n))] (using division operator)
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+      
+        int prod = 1, zeroCount = 0;
+        for (int num : nums) {
+            if (num != 0) {
+                prod *= num;
+            } else {
+                zeroCount++;
+            }
+        }
+
+        if (zeroCount > 1) {
+            return vector<int>(nums.size(), 0);
+        }
+
+        vector<int> res(nums.size());
+        for (int i = 0; i < nums.size(); i++) {
+            if (zeroCount > 0) {
+                res[i] = (nums[i] == 0) ? prod : 0;
+            } else {
+                res[i] = prod / nums[i];
+            }
+        }
+        return res;
+        
+    }
+};
+
+3.Most optimal(Prefix +suffix) =>(question says we cannot use division operator)
+
+approach=>https://youtu.be/bNvIQI2wAjk
+
+We can compute the product of all elements except the current one without using extra prefix and suffix arrays.
+Instead, we reuse the result array and build the answer in two simple passes:
+
+In the first pass, we fill res[i] with the product of all elements to the left of i (prefix product).
+In the second pass, we multiply each res[i] with the product of all elements to the right of i (postfix product).
+By maintaining two running values — prefix and postfix — we avoid the need for separate prefix and suffix arrays.
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n =  nums.size();
+        vector<int> res(n,1);  //output array;
+
+       for(int i=1;i<n;i++){  // storing prefix-multiplication in output array
+        res[i] = res[i-1]*nums[i-1]; //res=>[1,1,2,6] for testcase [1,2,3,4]
+       }
+
+        int postfix = 1;
+       for(int i=n-1;i>=0;i--){ //multiplying from right side again;
+        res[i]*=postfix;
+        postfix*=nums[i];
+       }
+
+       return res;
+
+
+
+
+
+        
+    }
+};
