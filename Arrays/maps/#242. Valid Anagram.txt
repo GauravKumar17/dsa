@@ -1,0 +1,99 @@
+Given two strings s and t, return true if t is an anagram of s,
+ and false otherwise.
+
+ 
+Example 1:
+
+Input: s = "anagram", t = "nagaram"
+
+Output: true
+
+Example 2:
+
+Input: s = "rat", t = "car"
+
+Output: false
+
+Constraints:
+
+1 <= s.length, t.length <= 5 * 104
+s and t consist of lowercase English letters.
+
+solution 1.(Brute force)=>T.c(o(nlogn + m log m)) [since sorting]
+
+// sort both the strings and match
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+
+        sort(s.begin(), s.end()); //O(nlog n)
+        sort(t.begin(), t.end()); //O(m log m)
+        return s == t;
+    }
+};
+
+#solution2 (Using maps=> t.c(O(n))) [optimal]
+S.c(O(1) since using only 26 characters)
+=> store each charcters and it iteration in two diffferent map and compare the maps
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+
+        if(s.size()!=t.size()){
+            return false;
+        }
+
+        unordered_map<char,int>mp1,mp2;
+
+        for(int i=0;i<s.size();i++){
+            mp1[s[i]]++;
+            mp2[t[i]]++;
+        }
+
+        return mp1==mp2;
+        
+    }
+};
+
+#solution 3 (using an array of len 26 , hence providing constant spacce (o(1)))
+
+T.c =O(n)
+
+Approach=>
+Since the problem guarantees lowercase English letters, we can use a fixed-size array of length 26 to count character frequencies instead of a hash map.
+As we iterate through both strings simultaneously, we increment the count for each character in s and decrement the count for each character in t.
+If the strings are anagrams, every increment will be matched by a corresponding decrement, and all values in the array will end at zero.
+This approach is efficient because it avoids hashing and uses constant space.
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+
+        if(s.size()!=t.size()){
+            return false;
+        }
+        vector<int>v(26,0);  //size 26 and all values are 0
+
+        for(int i=0;i<s.size();i++){
+            v[s[i]-'a']++;
+            v[t[i]-'a']--;
+        }
+
+        for(int x: v){
+            if(x!=0){
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+        
+};
+
+

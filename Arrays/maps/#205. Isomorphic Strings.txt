@@ -1,0 +1,94 @@
+Given two strings s and t, determine if they are isomorphic.
+
+Two strings s and t are isomorphic if the characters in s can be replaced to get t.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character, but a character may map to itself.
+
+ 
+
+Example 1:
+
+Input: s = "egg", t = "add"
+
+Output: true
+
+Explanation:
+
+The strings s and t can be made identical by:
+
+Mapping 'e' to 'a'.
+Mapping 'g' to 'd'.
+Example 2:
+
+Input: s = "foo", t = "bar"
+
+Output: false
+
+Explanation:
+
+The strings s and t can not be made identical as 'o' needs to be mapped to both 'a' and 'r'.
+
+Example 3:
+
+Input: s = "paper", t = "title"
+
+Output: true
+
+ 
+
+Constraints:
+
+1 <= s.length <= 5 * 104
+t.length == s.length
+s and t consist of any valid ascii character.
+
+
+Solution 1(Hash Map t.c =(0(n)) and s.c(0(26)->i.e,0(1)))
+
+Approach=>
+1.take two maps mp1 amd mp2;
+2.in mp1 map s->t and in mp2 map t->s;
+3. while maping if found that some char in s is already map previously to some char in t,
+ but now it is again maping to some other char in t, return false
+
+4. Similarly same for mp2 , if found that some char in t is already map previously to some char in s,
+ but now it is again maping to some other char in s, return false
+
+ 5. 2nd map is necesarry because:
+ ex: s="ab",t="cc"
+ mp1=> 
+ a->c(ok) , 
+ b->c (ok) , 
+ 
+ mp2=>
+ c->a (ok), 
+ c->b (xxx) => double mapping not possible
+
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        unordered_map<char, int> m1, m2;
+
+        for (int i = 0; i < s.size(); i++) {
+            char a = s[i];
+            char b = t[i];
+
+            if (m1.count(a)) {
+                if (m1[a] != b) {
+                    return false;
+                }
+            } else {
+                m1[a] = b;
+            }
+
+            if (m2.count(b)) {
+                if (m2[b] != a) {
+                    return false;
+                }
+            } else {
+                m2[b] = a;
+            }
+        }
+        return true;
+    }
+};
