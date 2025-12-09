@@ -1,0 +1,166 @@
+You are given an integer array nums.
+
+A special triplet is defined as a triplet of indices (i, j, k) such that:
+
+0 <= i < j < k < n, where n = nums.length
+nums[i] == nums[j] * 2
+nums[k] == nums[j] * 2
+Return the total number of special triplets in the array.
+
+Since the answer may be large, return it modulo 109 + 7.
+
+ 
+
+Example 1:
+
+Input: nums = [6,3,6]
+
+Output: 1
+
+Explanation:
+
+The only special triplet is (i, j, k) = (0, 1, 2), where:
+
+nums[0] = 6, nums[1] = 3, nums[2] = 6
+nums[0] = nums[1] * 2 = 3 * 2 = 6
+nums[2] = nums[1] * 2 = 3 * 2 = 6
+Example 2:
+
+Input: nums = [0,1,0,0]
+
+Output: 1
+
+Explanation:
+
+The only special triplet is (i, j, k) = (0, 2, 3), where:
+
+nums[0] = 0, nums[2] = 0, nums[3] = 0
+nums[0] = nums[2] * 2 = 0 * 2 = 0
+nums[3] = nums[2] * 2 = 0 * 2 = 0
+Example 3:
+
+Input: nums = [8,4,2,8,4]
+
+Output: 2
+
+Explanation:
+
+There are exactly two special triplets:
+
+(i, j, k) = (0, 1, 3)
+nums[0] = 8, nums[1] = 4, nums[3] = 8
+nums[0] = nums[1] * 2 = 4 * 2 = 8
+nums[3] = nums[1] * 2 = 4 * 2 = 8
+(i, j, k) = (1, 2, 4)
+nums[1] = 4, nums[2] = 2, nums[4] = 4
+nums[1] = nums[2] * 2 = 2 * 2 = 4
+nums[4] = nums[2] * 2 = 2 * 2 = 4
+ 
+
+Constraints:
+
+3 <= n == nums.length <= 105
+0 <= nums[i] <= 105
+
+Solution=>
+1.Using bruteForce(O(n^2))=> [TLE]
+
+Approach=>
+1.Loop through the array store sqaure of 1 -> n-2 one at a time in mul variable
+2.2nd loop through array find mul if its exsist in array
+3. if its exsist hceck if index(j) is greater or smaller than first loop index(i)
+4. if its smaller than push to left vector
+5. if its gretaer push to right vector
+6. check if both vector atleast contain one value.
+7. count +=  multiplaction of sizes of both vector
+
+class Solution {
+public:
+    int specialTriplets(vector<int>& nums) {
+        int n  = nums.size();
+        vector<int>left;
+        vector<int>right;
+        int mul = 1;
+        int count=0,less=0,more=0;
+        
+
+
+        for(int i=1;i<n-1;i++){
+            mul = nums[i]*2;
+
+            for(int j=0;j<n;j++){
+                if(nums[j]==mul){
+                    
+                    if(j<i) left.push_back(j);
+                    if(j>i) right.push_back(j);
+                }
+            }
+
+                less=left.size();
+                more=right.size();
+
+                if(less>0 && more >0){
+                    count += (less*more);
+                }
+                less=0;
+                more=0;
+                mul=1;
+                left.clear();
+                right.clear();
+
+        }
+
+
+        return count;
+        
+    }
+};
+
+Solution 2 =>(Using two hash maps => 2 passes) => T.c (O(n))
+
+class Solution {
+public:
+    int specialTriplets(vector<int>& nums) {
+        int m = 1e9+7;
+        int n  = nums.size();
+        unordered_map<long long ,long long>left,right;
+
+        
+        long long count=0;
+
+        // first fill the count of all the elements in the right map;
+        for(int i = 0;i<n;i++){
+            right[nums[i]]++;
+        }
+        
+        //iterate through th map again
+        for(int i=0;i<n;i++){
+            right[nums[i]]--; // decrease the count of current i from right map
+
+            long long mul = 1LL *nums[i]*2; // calculate the mul
+
+            // if(left.find(mul)!=left.end()){
+            //     if(right.find(mul)!=right.end()){
+            //         count+=(left[mul]*right[mul])%m;
+            //     }
+            // }
+
+            //or
+
+        // if mul exsist in both right and left map, multiply their ocuurences
+
+            count=(count+left[mul]*right[mul])%m;
+
+            left[nums[i]]++; //add count of visited i to the left map
+
+            
+        }
+
+
+        return count;
+        
+    }
+};
+
+
+solution3 => Optimal (O(n) => 1pass)
