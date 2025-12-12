@@ -1,0 +1,89 @@
+1343. Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Hint
+Given an array of integers arr and two integers k and threshold, return the number of sub-arrays of size k and average greater than or equal to threshold.
+
+ 
+
+Example 1:
+
+Input: arr = [2,2,2,2,5,5,5,8], k = 3, threshold = 4
+Output: 3
+Explanation: Sub-arrays [2,5,5],[5,5,5] and [5,5,8] have averages 4, 5 and 6 respectively. All other sub-arrays of size 3 have averages less than 4 (the threshold).
+Example 2:
+
+Input: arr = [11,13,17,23,29,31,7,5,2,3], k = 3, threshold = 5
+Output: 6
+Explanation: The first 6 sub-arrays of size 3 have averages greater than 5. Note that averages are not integers.
+ 
+
+Constraints:
+
+1 <= arr.length <= 105
+1 <= arr[i] <= 104
+1 <= k <= arr.length
+0 <= threshold <= 104
+
+Solution(#1)=. using sliding window(fixed size) + prefix sum
+T.c=>(O(n)), s.c =>(O(n))
+
+class Solution {
+public:
+    int numOfSubarrays(vector<int>& arr, int k, int threshold) {
+        int n= arr.size();
+        vector<int>v(n+1,0);
+        int count=0,sum=0;
+        int l=0, r=0;
+        v[0]=0;
+        for(int i=0;i<n;i++){
+            v[i+1]=v[i]+arr[i];
+        }
+
+        for(int i=0;i<=n-k;i++){
+            r=i+k-1;
+            sum = v[r+1]-v[i];
+            if(sum/k >= threshold){
+                count++;
+            }
+
+            
+        }
+        return count;
+        
+    }
+};
+
+solution(#2)=>sliding window 
+T.c(O(n)), S.c(O(1))
+
+class Solution {
+public:
+    int numOfSubarrays(vector<int>& arr, int k, int threshold) {
+        int n= arr.size();
+        int sum = 0,l=0,r=0,count=0;
+        
+        for(int i=0;i<k-1;i++){  //store first two value sum
+            sum+=arr[i];
+
+        }
+        //iterate from 3rd value through r
+        //add r to the sum => check if its avg>=threshold => remove i => add next r
+        for(int l=0;l<=n-k;l++){ 
+            r = l+k-1;
+            sum+=arr[r];
+
+            if(sum/k >= threshold){
+                count++;
+            }
+            sum-=arr[l];
+
+        }
+
+        return count;
+       
+    }
+};
