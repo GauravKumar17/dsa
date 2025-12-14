@@ -1,0 +1,129 @@
+Along a long library corridor, there is a line of seats and decorative plants. You are given a 0-indexed string corridor of length n consisting of letters 'S' and 'P' where each 'S' represents a seat and each 'P' represents a plant.
+
+One room divider has already been installed to the left of index 0, and another to the right of index n - 1. Additional room dividers can be installed. For each position between indices i - 1 and i (1 <= i <= n - 1), at most one divider can be installed.
+
+Divide the corridor into non-overlapping sections, where each section has exactly two seats with any number of plants. There may be multiple ways to perform the division. Two ways are different if there is a position with a room divider installed in the first way but not in the second way.
+
+Return the number of ways to divide the corridor. Since the answer may be very large, return it modulo 109 + 7. If there is no way, return 0.
+
+ 
+
+Example 1:
+
+
+Input: corridor = "SSPPSPS"
+Output: 3
+Explanation: There are 3 different ways to divide the corridor.
+The black bars in the above image indicate the two room dividers already installed.
+Note that in each of the ways, each section has exactly two seats.
+Example 2:
+
+
+Input: corridor = "PPSPSP"
+Output: 1
+Explanation: There is only 1 way to divide the corridor, by not installing any additional dividers.
+Installing any would create some section that does not have exactly two seats.
+Example 3:
+
+
+Input: corridor = "S"
+Output: 0
+Explanation: There is no way to divide the corridor because there will always be a section that does not have exactly two seats.
+ 
+
+Constraints:
+
+n == corridor.length
+1 <= n <= 105
+corridor[i] is either 'S' or 'P'.
+
+
+Solution(#1)=> T.c (O(n)) space(O(n))
+
+Approach=>
+1. store the index of the seats in an vector
+2. Loop through the vector and after every 2 seats find the gap between prev two seats and next two seats
+3. multiply the result of these gaps
+
+
+class Solution {
+public:
+    int numberOfWays(string corridor) {
+        int M = 1e9+7;
+        long long res = 1;
+        vector<int>seatIndex;
+        int n = corridor.size();
+
+        for(int i=0;i<n;i++){
+            if(corridor[i] == 'S'){
+                seatIndex.push_back(i);
+            }
+        }
+
+        int noOfSeats=seatIndex.size();
+
+        if(noOfSeats==0 || noOfSeats%2 != 0){
+            return 0;
+        }
+
+        int prevIndex = seatIndex[1];
+
+        for(int i=2;i<noOfSeats;i=i+2){
+            int currIndex = seatIndex[i];
+            int diff = currIndex-prevIndex;
+            res=(res*diff)%M;
+            prevIndex = seatIndex[i+1];
+
+        }
+        return res;
+        
+    }
+};
+
+Solution(#2)=> Combinatorics+Optimized space(O(1))
+
+class Solution {
+public:
+    int numberOfWays(string corridor) {
+        // Store 1000000007 in a variable for convenience
+        const int MOD = 1e9 + 7;
+
+        // Total number of ways
+        long count = 1;
+
+        // Number of seats in the current section
+        int seats = 0;
+
+        // Tracking Index of last S in the previous section
+        int previousPairLast = -1;
+
+        // Keep track of seats in corridor
+        for (int index = 0; index < corridor.length(); index++) {
+            if (corridor[index] == 'S') {
+                seats += 1;
+
+                // If two seats, then this is the last S in the section
+                // Update seats for the next section
+                if (seats == 2) {
+                    previousPairLast = index;
+                    seats = 0;
+                }
+
+                // If one seat, then this is the first S in the section
+                // Compute product of non-paired neighbors
+                else if (seats == 1 && previousPairLast != -1) {
+                    count *= (index - previousPairLast);
+                    count %= MOD;
+                }
+            }
+        }
+
+        // If odd seats, or zero seats
+        if (seats == 1 || previousPairLast == -1) {
+            return 0;
+        }
+
+        // Return the number of ways
+        return (int) count;
+    }
+};
