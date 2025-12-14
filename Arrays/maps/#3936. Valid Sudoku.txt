@@ -1,0 +1,152 @@
+Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+
+Each row must contain the digits 1-9 without repetition.
+Each column must contain the digits 1-9 without repetition.
+Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+Note:
+
+A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+Only the filled cells need to be validated according to the mentioned rules.
+ 
+
+Example 1:
+
+
+Input: board = 
+[["5","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+Output: true
+Example 2:
+
+Input: board = 
+[["8","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+Output: false
+Explanation: Same as Example 1, except with the 5 in the top left corner being modified to 8. Since there are two 8's in the top left 3x3 sub-box, it is invalid.
+ 
+
+Constraints:
+
+board.length == 9
+board[i].length == 9
+board[i][j] is a digit 1-9 or '.'.
+
+
+Solution(#1)=> Brute Force + maps
+
+class Solution {
+public:
+    bool checkRowCol(vector<vector<char>>& board,int i,int j){
+        unordered_map<char,int>row,col;
+        for(int a=0;a<9;a++){
+            if(board[i][a]!= '.'){
+                row[board[i][a]]++;
+            }
+            if(board[a][j]!= '.'){
+                col[board[a][j]]++;
+            }
+        }
+        for(auto &p: row){
+            if(p.second >1){
+                return false;
+            }
+        }
+        for(auto &p: col){
+            if(p.second >1){
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+    bool checkBox(vector<vector<char>>& board,int i,int j){
+        unordered_map<char,int>box;
+        unordered_map<int,pair<int,int>>check{
+            {0,{0,0}},{1,{0,3}},{2,{0,6}},
+            {3,{3,0}},{4,{3,3}},{5,{3,6}},
+            {6,{6,0}},{7,{6,3}},{8,{6,6}}
+        };
+
+        int boxSum = (i/3)*3 + (j/3);
+
+        int row = check[boxSum].first;
+        int col = check[boxSum].second;
+        for(int a=row;a<row+3;a++){
+            for(int b=col;b<col+3;b++){
+                if(board[a][b] != '.'){
+                box[board[a][b]]++;
+                }
+            }
+        }
+        for(auto &p : box){
+            if(p.second > 1){
+                return false;
+            }
+        }
+        return true;
+
+        
+    }
+
+    bool isValidSudoku(vector<vector<char>>& board) {
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                if(board[i][j] != '.'){
+                    bool check1 = checkRowCol(board,i,j);
+                    bool check2 = checkBox(board,i,j);
+
+                    if(check1 == false || check2 == false){
+                        return false;
+                    }
+
+                }
+            }
+        }
+        return true;
+        
+    }
+};
+
+
+Solution(#2)=> optimal
+
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        bool rows[9][9] = {};
+        bool cols[9][9] = {};
+        bool boxes[9][9] = {};
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] == '.') continue;
+
+                int num = board[i][j] - '1';
+                int box = (i / 3) * 3 + (j / 3);
+
+                if (rows[i][num] || cols[j][num] || boxes[box][num])
+                    return false;
+
+                rows[i][num] = true;
+                cols[j][num] = true;
+                boxes[box][num] = true;
+            }
+        }
+        return true;
+    }
+};
