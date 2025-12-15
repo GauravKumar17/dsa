@@ -69,7 +69,7 @@ public:
             }
 
         }
-        ans += i*(i+1)/2;
+        ans += i*(i+1)/2; // last element descending array ka jo add nhi ho paaya tha
 
         return ans;
     }
