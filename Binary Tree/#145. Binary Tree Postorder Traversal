@@ -1,0 +1,88 @@
+
+
+ Solution=>(T.c(O(n)), s.c=O(n)) => Recursive
+
+class Solution {
+public:
+    void postorder(TreeNode* root , vector<int>&v){
+        if(root == NULL){
+            return ;
+        }
+        else{
+            postorder(root->left,v);
+            postorder(root->right,v);
+            v.push_back(root->val);
+
+        }
+
+    }
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int>v;
+        postorder(root,v);
+
+        return v;
+        
+    }
+};
+
+Solution(#2)=>Iterative (using TWO stacks) T.c(O(n)), s.c=O(n)
+
+Approach:
+1.Push root into s1
+
+2.While s1 is not empty:
+    Pop node from s1
+    Push that node into s2
+    If node has left child, push it into s1
+    If node has right child, push it into s1
+
+3.While s2 is not empty:
+    Pop from s2
+    Output node’s value
+
+
+class Solution {
+public:
+   
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int>v;
+        stack<TreeNode*>st1,st2;
+        st1.push(root);
+        if(root == NULL){
+            return v;
+        }
+
+        while(!st1.empty()){
+            TreeNode* top = st1.top();
+            st1.pop();
+            st2.push(top);
+            if(top->left != NULL){
+                st1.push(top->left);
+            }
+            if(top->right != NULL){
+                st1.push(top->right);
+            }
+
+        }
+
+        while(!st2.empty()){
+            v.push_back(st2.top()->val);
+            st2.pop();
+        }
+
+
+        return v;
+        
+    }
+};
+
+
+
+
+Solution(#2)=>Iterative (using ONE stacks) T.c(O(n)), s.c=O(n)
+
+
+
+
+
+
