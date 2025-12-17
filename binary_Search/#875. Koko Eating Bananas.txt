@@ -31,6 +31,13 @@ piles.length <= h <= 109
 
 Solution(#Binary search)
 
+Intution:
+#1 The upper bound for k is the maximum size of all the piles. Why? Because if Koko eats the largest pile in one hour,
+ then it is straightforward that she can eat any other pile in an hour only.
+#2 he upper bound of k is max(piles) and since we are only dealing with positive values, the lower bound is 1.
+ The search space of our binary search is 1 through max(piles).
+ This allows us to find the smallest possible k using binary search.
+
 class Solution {
 public:
     int minEatingSpeed(vector<int>& piles, int h) {
