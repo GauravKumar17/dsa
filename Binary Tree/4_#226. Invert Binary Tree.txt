@@ -23,7 +23,7 @@ Constraints:
 The number of nodes in the tree is in the range [0, 100].
 -100 <= Node.val <= 100
 
-Recursion T.c =>O(n),S.c=>O(h), h->height of the tree
+Solution(#1) Recursion T.c =>O(n),S.c=>O(h), h->height of the tree
 
 class Solution {
 public:
@@ -41,6 +41,16 @@ public:
 
 
 Solution(#2)=> using Queue T.c =>O(n),S.c=>O(h)
+
+Algorithm:
+If the tree is empty, return null.
+Initialize a queue and insert the root node.
+While the queue is not empty:
+Remove the front node.
+Swap its left and right children.
+If the left child exists, add it to the queue.
+If the right child exists, add it to the queue.
+After all nodes are processed, return the root as the inverted tree.
 
 class Solution {
 public:
