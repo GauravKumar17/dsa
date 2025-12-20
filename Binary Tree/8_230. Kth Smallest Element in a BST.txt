@@ -24,7 +24,7 @@ The number of nodes in the tree is n.
 Follow up: If the BST is modified often (i.e., we can do insert and delete operations) and you need to find the kth smallest frequently, how would you optimize?
 
  
-Solution(brute Force) => DFS+sorting  T.c(O(n)+O(nlog n));
+Solution(brute Force) => DFS+sorting  T.c(O(n)+O(nlog n)); space =O(n)
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -67,7 +67,7 @@ public:
 };
 
 Solution(#1)=> since binary search tree only dfs traversal required
-T.c => O(n)
+T.c => O(n)  space =O(n)
 
 class Solution {
 private:
@@ -98,7 +98,7 @@ public:
     }
 };
 
-Solution(#3)
+Solution(#3) t.c => O(n) space =O(n)
 class Solution {
     
 private:
@@ -134,3 +134,5 @@ public:
         
     }
 };
+
+Solution(#3 Morris Traversal) t.c => O(n) space =O(1)
