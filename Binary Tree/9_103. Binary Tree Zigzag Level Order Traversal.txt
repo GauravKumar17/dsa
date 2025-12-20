@@ -1,0 +1,100 @@
+Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. (i.e., from left to right, then right to left for the next level and alternate between).
+
+ 
+
+Example 1:
+
+
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[20,9],[15,7]]
+Example 2:
+
+Input: root = [1]
+Output: [[1]]
+Example 3:
+
+Input: root = []
+Output: []
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [0, 2000].
+-100 <= Node.val <= 100
+
+Solution(T.c => O(n), space O(n))
+
+Approach
+1. Use level order traversal...
+2.while adding the level to the res => reverse the levels which are at even places
+
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>>res;
+        if(!root){
+            return res;
+        }
+        queue<TreeNode*>q;
+        q.push(root);
+
+        int k=1;
+        while(!q.empty()){
+            int size = q.size();
+            vector<int>v;
+            for(int i=0;i<size;i++){
+                TreeNode* front = q.front();
+                q.pop();
+                v.push_back(front->val);
+                if(front->left){q.push(front->left);}
+                if(front->right){q.push(front->right);}
+            }
+            if(k%2==0){
+                reverse(v.begin(),v.end());
+            }
+            res.push_back(v);
+            k++;
+
+        }
+        return res;
+        
+    }
+};
+
+Solution(#2) => O(n) without using reverse
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>>res;
+        if(!root){
+            return res;
+        }
+        queue<TreeNode*>q;
+        q.push(root);
+
+        int k=1,index = 0;
+        while(!q.empty()){
+            int size = q.size();
+            vector<int>v(size);
+            for(int i=0;i<size;i++){
+                TreeNode* front = q.front();
+                q.pop();
+
+                int index;
+                (k==-1)? index = size-1-i:index=i;
+                v[index]=front->val;
+                
+                if(front->left){q.push(front->left);}
+                if(front->right){q.push(front->right);}
+            }
+            k=-(k);
+            res.push_back(v);
+            
+
+        }
+        return res;
+        
+    }
+};
