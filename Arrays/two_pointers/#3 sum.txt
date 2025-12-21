@@ -1,0 +1,113 @@
+Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+
+Notice that the solution set must not contain duplicate triplets.
+
+ 
+
+Example 1:
+
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
+Explanation: 
+nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
+nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
+nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
+The distinct triplets are [-1,0,1] and [-1,-1,2].
+Notice that the order of the output and the order of the triplets does not matter.
+Example 2:
+
+Input: nums = [0,1,1]
+Output: []
+Explanation: The only possible triplet does not sum up to 0.
+Example 3:
+
+Input: nums = [0,0,0]
+Output: [[0,0,0]]
+
+Explanation: The only possible triplet sums up to 0.
+
+
+
+Intution => 
+1. we did sorting so that whenever we get two pairs which contain same triplet , then they will be in same order
+ex: without sorting => [-1,0,1] & [1.-1,0] => both contain same value hence we can keep only one, but since order is different, set will accept itself
+    with sorting => [-1,0,1] & [-1,0,1] => triplets will always appear in sorted order , hence set will keep only one of the two
+
+Sorting helps in two ways:
+
+It lets us skip duplicates easily.
+It ensures that moving the left or right pointer will increase or decrease the sum in a predictable way.
+
+
+Solution(#Brute Force) => t.c O(n^3)
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        
+        set<vector<int>>res;
+        sort(nums.begin(), nums.end());
+        
+        for(int i=0;i<nums.size();i++){
+            for(int j=i+1;j<nums.size();j++){
+                for(int k=j+1;k<nums.size();k++){
+                        if(nums[i]+nums[j]+nums[k]==0){
+                            res.insert({nums[i],nums[j],nums[k]});
+                           
+                        }
+                }
+            }
+        }
+        return vector<vector<int>>(res.begin(),res.end());
+        
+    }
+};
+
+Solution(#two pinters) => t.c O(n^2)
+
+Intution:
+Fix an element at index nums[i] in a;
+For each fixed number a, we place two pointers:
+
+l starts just after i,
+r starts at the end.
+If the current sum is too large, we move r left to reduce it.
+If the sum is too small, we move l right to increase it.
+When the sum is exactly zero, we record the triplet and skip duplicates.
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        
+        vector<vector<int>>res;
+        sort(nums.begin(), nums.end());
+        for(int i=0;i<nums.size();i++){
+            int a = nums[i];
+            if(a>0){break;}                           //since if first value is positive res oyher value will also be positive in a sorted array
+            if(i>0 && nums[i]==nums[i-1]){continue;}     //skip repeating values
+            int r=nums.size()-1;
+            int l=i+1;
+            while(l<r){
+                int sum = a+nums[r]+nums[l];
+                if(sum>0){
+                    r--;
+                }else if(sum<0){
+                    l++;
+                }else {
+                    res.push_back({a,nums[l],nums[r]});
+                    l++;
+                    r--;
+                    while(l<r && nums[l]==nums[l-1]){  //skip repeating value after incrementing l
+                        l++;                                 
+                    }
+
+                }
+        
+            }
+        }
+        
+        
+        return res;
+        
+    }
+};
