@@ -1,0 +1,103 @@
+Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
+
+ 
+
+Example 1:
+
+Input: root = [1,2,3,null,5,null,4]
+
+Output: [1,3,4]
+
+Explanation:
+
+
+
+Example 2:
+
+Input: root = [1,2,3,4,null,null,null,5]
+
+Output: [1,3,4,5]
+
+Explanation:
+
+
+
+Example 3:
+
+Input: root = [1,null,3]
+
+Output: [1,3]
+
+Example 4:
+
+Input: root = []
+
+Output: []
+
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [0, 100].
+-100 <= Node.val <= 100
+
+Solution(# BFS)
+
+approach=>
+The nodes visible in the right-side view are the last nodes at each level of the tree. 
+Can you think of an algorithm to identify these nodes? Maybe an algorithm that can traverse the tree level by level.
+
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> v;
+        if (!root) {
+            return v;
+        }
+        queue<TreeNode*> q1;
+        q1.push(root);
+
+        while (!q1.empty()) {
+            int size = q1.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode* fr1 = q1.front();
+                q1.pop();
+                if (i == size - 1) {
+                    v.push_back(fr1->val);
+                }
+                if (fr1->left) {
+                    q1.push(fr1->left);
+                }
+                if (fr1->right) {
+                    q1.push(fr1->right);
+                }
+            }
+        }
+        return v;
+    }
+};
+
+Solution(#DFS)
+
+Approach=>if the depth of the node is equal to the size of the vector v then thats the req node
+
+class Solution {
+    
+public:
+    vector<int>v;
+    vector<int> rightSideView(TreeNode* root) {
+        dfs(root,0); 
+        return v;
+    }
+    void dfs(TreeNode* root, int depth){
+        if(!root){
+            return;
+        }
+        if(v.size() == depth){
+            v.push_back(root->val);
+        }
+
+        dfs(root->right,depth+1);
+        dfs(root->left,depth+1);
+    }
+};
