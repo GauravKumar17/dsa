@@ -1,0 +1,131 @@
+Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
+
+ 
+
+Example 1:
+
+
+Input: root = [1,2,2,3,4,4,3]
+Output: true
+Example 2:
+
+
+Input: root = [1,2,2,null,3,null,3]
+Output: false
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [1, 1000].
+-100 <= Node.val <= 100
+ 
+
+Follow up: Could you solve it both recursively and iteratively?
+
+Solution(#BFS + check plaindrome)  T.c => O(N)
+
+Intution=>
+1. traverse level wise and store the level in a vector , check if the vector is a pallindrome or not
+
+class Solution {
+private:
+    bool checkPalindrome(vector<int>v){
+        int l = 0;
+        int r = v.size()-1;
+        if(l==r){
+            return false;
+        }
+        while(l<r){
+            if (v[l]!=v[r]){
+                return false;
+            }
+            l++;
+            r--;
+        }
+        return true;
+    }
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(root == NULL){
+            return false;
+        }
+        queue<TreeNode*>q1;
+        q1.push(root);
+        vector<int>v1,v2;
+
+
+        while(!q1.empty()){
+            int size = q1.size();
+            vector<int>v;
+            for(int i=0;i<size;i++){
+                TreeNode* fr1 = q1.front();
+                q1.pop();
+
+                if(fr1->left){
+                    q1.push(fr1->left);
+                    v.push_back(fr1->left->val);
+                } else{
+                    v.push_back(-101);
+                }
+                if(fr1->right){
+                    q1.push(fr1->right);
+                    v.push_back(fr1->right->val);
+                } else{
+                    v.push_back(-101);
+                }
+
+
+            }
+            if(checkPalindrome(v)){
+                continue ; 
+            }
+            else{
+                return false;
+            }
+
+            
+        }
+        return true;
+        
+    }
+};
+
+Solution(#2 Recursion) t.c=> O(n)
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private:
+    bool dfs(TreeNode* p, TreeNode*q){
+        if(!p && !q){
+            return true;
+        }
+        if(!p || !q){
+            return false;
+        }
+        if(p->val != q->val){
+            return false;
+        }
+
+        return dfs(p->left,q->right) && dfs(p->right,q->left);
+
+    }
+public:
+    bool isSymmetric(TreeNode* root) {
+
+        if(!root){
+            return false;
+        }
+        return dfs(root->left,root->right);
+    }
+};
+
