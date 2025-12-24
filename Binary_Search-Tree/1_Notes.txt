@@ -2,7 +2,7 @@
 Binary Search Tree->
     1. A tree in which the elements in the left is smaller than the node and the element in the right is greater than the node.
         i.e For every Subtree :- left<Node<Right
-    2.Height of the binary tree is always log n.
+    2.Height of the binary search tree is always log n.
     3.searching/inserting/deleting in a complete binary search tree  takes O(log n) time.4
     (Only balanced BSTs guarantee O(log n))
 
