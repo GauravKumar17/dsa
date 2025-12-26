@@ -83,7 +83,8 @@ public:
                 int l = j + 1, r = n - 1;
 
                 while (l < r) {
-                    sum = (long long)nums[i] + nums[j] + nums[l] + nums[r];
+                    sum = (long long)nums[i] + nums[j] + nums[l] + nums[r]; //(long long) Because the addition happens before assignment to long long variable "sum".
+                                                                            //Even if sum is long long, the expression on the right side may already have overflowed.
                     if (sum > target) {
                         r--;
                     } else if (sum < target) {
