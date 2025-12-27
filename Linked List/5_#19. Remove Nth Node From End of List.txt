@@ -61,7 +61,7 @@ public:
 };
 
 
-solution(one pass)=>TWO POINTERS T.c => O(n)
+solution(#2 one pass)=>TWO POINTERS T.c => O(n)
 
 Intutuion:
 
