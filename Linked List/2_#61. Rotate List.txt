@@ -1,0 +1,81 @@
+Given the head of a linked list, rotate the list to the right by k places.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,4,5], k = 2
+Output: [4,5,1,2,3]
+Example 2:
+
+
+Input: head = [0,1,2], k = 4
+Output: [2,0,1]
+ 
+
+Constraints:
+
+The number of nodes in the list is in the range [0, 500].
+-100 <= Node.val <= 100
+0 <= k <= 2 * 109
+
+
+Solution(#1) => t.c=>O(n)
+
+class Solution {
+private:
+    ListNode* reverse (ListNode* head){
+        if(head == NULL || head->next == NULL){
+            return head;
+        }
+        ListNode* prev = NULL;
+        ListNode* fwd = NULL;
+        ListNode* curr = head;
+
+        while(curr!=NULL){
+            fwd = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr =fwd;
+        }
+
+        return prev;
+    }
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        int count = 1,len = 1;
+        ListNode* temp = head;
+
+        if(head == NULL || head->next == NULL || k==0){
+            return head;
+        }
+
+        while(temp->next != NULL){
+            temp = temp->next;
+            len++;
+        }
+
+        k = k%len;
+        if(k==0) return head;
+
+        temp  = head;
+        while(count < len-k){
+            temp = temp->next;
+            count++;
+        }
+
+        ListNode* second = temp->next;
+        temp->next = NULL;
+
+        ListNode* firstPartReverse = reverse(head);
+        ListNode* secondPartReverse = reverse(second);
+
+        head->next = secondPartReverse;
+
+        ListNode* fullReverse = reverse(firstPartReverse);
+        
+        return fullReverse;
+        
+    }
+};
