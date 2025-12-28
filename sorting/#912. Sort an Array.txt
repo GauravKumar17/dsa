@@ -1,0 +1,104 @@
+Given an array of integers nums, sort the array in ascending order and return it.
+
+You must solve the problem without using any built-in functions in O(nlog(n)) time complexity and with the smallest space complexity possible.
+
+ 
+
+Example 1:
+
+Input: nums = [5,2,3,1]
+Output: [1,2,3,5]
+Explanation: After sorting the array, the positions of some numbers are not changed (for example, 2 and 3), while the positions of other numbers are changed (for example, 1 and 5).
+Example 2:
+
+Input: nums = [5,1,1,2,0,0]
+Output: [0,0,1,1,2,5]
+Explanation: Note that the values of nums are not necessarily unique.
+ 
+
+Constraints:
+
+1 <= nums.length <= 5 * 104
+-5 * 104 <= nums[i] <= 5 * 104
+
+Solution(#1 Bubble Sort) => t.c=>O(n^2) [TLE]
+
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+
+        for(int i=0;i<nums.size();i++){
+            bool swapped = false;
+            for(int j=1;j<nums.size();j++){
+                if(nums[j-1] > nums[j]){
+                    swap(nums[j-1],nums[j]);
+                    swapped = true;
+                }
+
+            }
+            if(!swapped){break;}
+        }
+
+        return nums;
+        
+    }
+};
+
+Solution(#2 Merge Sort) => T.c =>O(n logn)
+
+class Solution {
+private:
+    void merge(vector<int>&nums, int l,int mid, int r){
+        vector<int>temp;
+        int left = l;
+        int right = mid+1;
+
+        while(left<=mid && right<=r){
+            if(nums[left]<=nums[right]){
+                temp.push_back(nums[left]);
+                left++;
+            }
+            else{
+                temp.push_back(nums[right]); 
+                right++;
+            }
+        }
+
+        //if something is left on left or right
+
+        while(left<=mid){
+            temp.push_back(nums[left]);
+            left++;
+        }
+        while(right<=r){
+            temp.push_back(nums[right]);
+            right++;
+        }
+
+        // put back into main array
+
+        for(int i=l;i<=r;i++){
+            nums[i] = temp[i-l];
+        }
+
+    }
+    void mergesort(vector<int>&nums, int l,int r){
+        if(l==r){
+            return;
+        }
+        int mid = l+(r-l)/2;
+        mergesort(nums,l,mid);
+        mergesort(nums,mid+1,r);
+
+        merge(nums,l,mid,r);
+    }
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        int l = 0;
+        int r = nums.size()-1;
+        mergesort(nums,l,r);
+
+        return nums;
+
+    }
+};
