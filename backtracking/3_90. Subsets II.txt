@@ -1,0 +1,88 @@
+Given an integer array nums that may contain duplicates, return all possible subsets (the power set).
+
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,2]
+Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
+Example 2:
+
+Input: nums = [0]
+Output: [[],[0]]
+
+
+video - https://youtu.be/pNzljlzDCiI?si=RCvJ8ZIUyJ-1MM_l
+
+Solution(#1 Backtracking + dfs + sorting + set) =. t.c => O(n* 2^n + nlogn) s.c => (o(n) & O(2^n))
+
+class Solution {
+private:
+    void subsets(vector<int>& nums,set<vector<int>>&res,vector<int>&v,int i){
+        if(i == nums.size()){
+            res.insert(v);
+            return;
+        }
+
+        //including
+        v.push_back(nums[i]);
+        subsets(nums,res,v,i+1);
+
+        //removing the last element on return
+        v.pop_back();
+
+        //excluding
+        subsets(nums,res,v,i+1);
+
+    }
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        set<vector<int>>res;
+        vector<int>v;
+        sort(nums.begin(),nums.end());
+        subsets(nums,res,v,0);
+
+        return vector<vector<int>>(res.begin(),res.end());
+        
+    }
+};
+
+
+Solution(#1 Backtracking + dfs + sort + without using set) =. t.c => O(n* 2^n + nlogn) s.c => (o(n) & O(2^n))
+
+class Solution {
+private:
+    void subsets(vector<int>& nums,vector<vector<int>>&res,vector<int>&v,int i){
+        if(i == nums.size()){
+            res.push_back(v);
+            return;
+        }
+        //including
+        v.push_back(nums[i]);
+        subsets(nums,res,v,i+1);
+
+        //remove last element on return
+        v.pop_back();
+
+        //skip duplicate values
+        int idx = i+1;
+        while(idx<nums.size() && nums[idx] == nums[idx-1]){
+            idx++;
+        }
+        //exclude
+        subsets(nums,res,v,idx);
+
+    }
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<vector<int>>res;
+        vector<int>v;
+        sort(nums.begin(),nums.end());
+        subsets(nums,res,v,0);
+
+        return res;
+        
+    }
+};
