@@ -33,7 +33,7 @@ Constraints:
 0 <= digits[i] <= 9
 digits does not contain any leading 0's.
 
-solution(#1)=>T.c=O(n)
+solution(#1)=>T.c=O(n), S.c=O(n)
 
 class Solution {
 public:
@@ -58,6 +58,27 @@ public:
 
         reverse(v.begin(),v.end());
         return v;
+        
+    }
+};
+
+
+Solution(#2)=>T.c=O(n), S.c=O(1)
+
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        int len = digits.size();
+        int bal = 1;
+        for(int i=len-1;i>=0;i--){
+            int sum = digits[i] + bal;
+            digits[i] = sum%10;
+            bal = sum/10;
+        }
+        if(bal){
+            digits.insert(digits.begin(),1);
+        }
+        return digits;
         
     }
 };
