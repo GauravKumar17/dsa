@@ -41,6 +41,6 @@ public:
                 return nums[i];
             }
         }
-        return nums[nums.size()-1];
+        return nums[nums.size()-1];  // if no pair found in above loop then , last 2 elements must be repeating;
     }
 };
