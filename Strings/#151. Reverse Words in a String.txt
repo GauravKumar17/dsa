@@ -34,7 +34,7 @@ There is at least one word in s.
 Follow-up: If the string data type is mutable in your language, can you solve it in-place with O(1) extra space?
 
 Solution
-1.(BruteForce T.c=> O(n) , space => O(1) )
+1.(BruteForce T.c=> O(n) , space => O(n) )
 
 approach-> reverse the whole string and then iterate through each word reverse it and add to a vector
 
