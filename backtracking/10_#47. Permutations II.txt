@@ -32,7 +32,7 @@ class Solution {
             res.push_back(temp);
             return;
         }
-        unordered_set<int>used;
+        unordered_set<int>used; //used should be at recursion level and not global. it says “At THIS recursion level, which values have I already tried?”
         
         for (int i = 0; i < nums.size(); i++) {
             if (mp[nums[i]] != 0 && used.find(nums[i]) == used.end()) {
