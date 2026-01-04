@@ -58,6 +58,14 @@ public:
 };
 
 Solution(#2) => T.c= O(N∗Sqrt(M))
+
+Intution =>
+in the very first example, for 21,
+21%3==0 so 3 will be added,
+and at that point, you can also store 7 because 21/3==7,
+by this approach you need to only search till sqrt(x)
+
+
 class Solution {
 public:
     int sumFourDivisors(vector<int>& nums) {
