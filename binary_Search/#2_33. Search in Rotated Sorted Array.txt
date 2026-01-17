@@ -34,7 +34,7 @@ Solution(t.c=> O(log n))
 
 class Solution {
 public:
-    int pivot(vector<int>& nums,int n){
+    int pivot(vector<int>& nums,int n){  // same as #153 search minimum in rotated sorted array.
         int l=0, r=n-1;
         while(l<r){
             int mid = l+(r-l)/2;
