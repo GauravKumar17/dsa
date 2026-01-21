@@ -68,3 +68,35 @@ public:
     }
 };
 
+
+Solution(#2) => slightly more optimal binary search
+
+Intution:
+If the mid element is the local maximum. Cool! Return.
+
+But if it isn't, and no two adjacent elements are equal, then either of the elements (or maybe both of them) will be greater than our mid element.
+
+Now whichever side has the greater element, we can go to that side and continue the same process.
+
+
+class Solution {
+public:
+    int singleNonDuplicate(vector<int>& nums) {
+        int l = 0, r = nums.size() - 1;
+
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+
+            // ensure mid is even
+            if (mid % 2 == 1) mid--;
+
+            if (nums[mid] == nums[mid + 1]) {
+                l = mid + 2;   // skip the pair
+            } else {
+                r = mid;       // single is on left (or mid)
+            }
+        }
+        return nums[l];
+    }
+};
+
