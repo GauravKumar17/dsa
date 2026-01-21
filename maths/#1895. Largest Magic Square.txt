@@ -30,7 +30,16 @@ n == grid[i].length
 
 Solution(#1)
 
- Time complexity: O(mn*min(m,n)^2)  space => O(mn)
+
+ Time complexity:
+ size loop      → O(min(m,n))
+ i loop         → O(m)
+ j loop         → O(n)
+ k loop         → O(size)
+
+ => O(mn*min(m,n)^2) 
+  
+   space => O(mn)
 
 
 class Solution {
