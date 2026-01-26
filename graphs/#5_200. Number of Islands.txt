@@ -116,3 +116,161 @@ public:
         return count;
     }
 };
+
+
+Explaination Of time complexity:
+
+
+1️⃣ What your brain is doing (and why it feels like ×)
+
+You see this:
+
+for (i = 0 to m)
+  for (j = 0 to n)
+    bfs(...)
+
+
+And inside BFS you see:
+
+while (!q.empty())
+
+
+So your brain says:
+
+“Nested loops → multiply → O(mn) × O(mn)”
+
+This would be correct IF BFS ran fully for every cell.
+
+But it does not.
+
+
+
+2️⃣ The ONE rule that breaks the multiplication
+
+Once a cell is visited, it is NEVER processed again.
+
+This single fact changes everything.
+
+
+
+3️⃣ Let’s simulate worst case (ALL land)
+
+Assume:
+
+Grid = m × n
+
+Every cell = '1'
+
+Step A: Outer loops
+for all cells:
+    if not visited:
+        bfs()
+
+
+First cell (0,0) → not visited → BFS starts
+
+BFS will visit EVERY cell
+
+All cells become visited
+
+Now:
+
+For (0,1), (0,2), ..., (m-1,n-1)
+
+vis[i][j] == true
+
+BFS is NOT called again
+
+👉 BFS runs ONCE, not m×n times.
+
+
+
+4️⃣ What does BFS do internally?
+
+Inside BFS:
+
+while (!q.empty()) {
+    pop one cell
+    check 8 neighbors
+}
+
+
+Each cell:
+
+Is pushed into queue once
+
+Is popped once
+
+Checks 8 neighbors (constant)
+
+So total BFS work:
+
+(m × n) × 8  → O(m × n)
+
+
+
+5️⃣ What if there are many islands?
+
+Worst case:
+
+1 0 1 0 1
+0 0 0 0 0
+1 0 1 0 1
+
+
+BFS runs multiple times
+
+BUT each BFS covers disjoint cells
+
+No cell is ever processed twice
+
+So total work is still:
+
+(sum of sizes of all islands) = m × n
+
+
+
+6️⃣ Why multiplication DOES NOT apply (key insight)
+
+Multiplication applies only when:
+
+“For every iteration of loop A, loop B runs fully.”
+
+Here:
+
+BFS does not run fully for each (i, j)
+
+It runs only for unvisited cells
+
+And collectively, all BFS calls cover each cell once
+
+So we ADD the work, not multiply it.
+
+
+
+7️⃣ The money analogy (this usually makes it click)
+
+Imagine:
+
+You have m×n boxes
+
+Each box has $1
+
+BFS means “pick up money from connected boxes”
+
+You never pick money from the same box twice.
+
+So total money collected:
+
+$1 + $1 + ... = m × n dollars
+
+
+Not:
+
+(m × n) × (m × n)
+
+
+
+🔑 ONE sentence to memorize (this is the key)
+
+BFS is not O((mn)²) because each cell enters the queue once and is processed once — BFS work is distributed, not repeated.
