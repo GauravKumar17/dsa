@@ -16,7 +16,7 @@ Visit 4 (neighbor of 2) → Final Output: 0, 2, 3, 1, 4
 
 
 
-Solution(#1) = t.c => O(N) + O(2V)
+Solution(#1) = t.c => O(V) + O(2E)  note:[total degree of the graph = 2*no. of edges]
 
 class Solution {
   public:
@@ -40,10 +40,7 @@ class Solution {
                 q.push(adj[front][i]);
                 visited[adj[front][i]] = 1;
             }
-        }
-        
-        
-        
+        }     
     }
     return res;
     }

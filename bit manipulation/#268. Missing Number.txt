@@ -32,13 +32,6 @@ Explanation:
 
 n = 9 since there are 9 numbers, so all numbers are in the range [0,9]. 8 is the missing number in the range since it does not appear in nums.
 
- 
- 
-
- 
-
- 
-
 Constraints:
 
 n == nums.length
@@ -72,6 +65,12 @@ public:
 };
 
 Solution(#2) => T.c =>O(n), s.c=> O(1) [Bit Manipulation]
+
+// Step-1 find lenght of the array
+ // Step 2: XOR all expected numbers (1 to n) // This represents the complete sequence
+// Step 3: XOR all present numbers in array // This cancels out all matching numbers
+// Step 4 & 5: After cancellation, only missing number remains
+
 
 class Solution {
 public:
