@@ -42,7 +42,7 @@ edges[i] = [ui, vi, wi]
 1 <= wi <= 1000
 
 
-Solution(#1) => Dijkstra algo (t.c=> O(ELogV))
+Solution(#1) => Dijkstra algo (t.c=> O(ELogV)) space=> O(v+E)
 
 Note: priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq; -> it sorts the pair based on 
 {pair.first  → primary key ,pair.second → tie-breaker} , hence for a min-heap 'first' should always be the weight of the graph
