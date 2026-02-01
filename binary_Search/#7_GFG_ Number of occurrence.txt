@@ -1,0 +1,62 @@
+Given a sorted array, arr[] and a number target, you need to find the number of occurrences of target in arr[]. 
+
+Examples :
+
+Input: arr[] = [1, 1, 2, 2, 2, 2, 3], target = 2
+Output: 4
+Explanation: target = 2 occurs 4 times in the given array so the output is 4.
+
+
+Solution(#1) = >O(logn)
+
+class Solution {
+  public:
+  
+
+    int rightmostOccurence(vector<int>& arr,int target){
+        
+        int low = 0, high = arr.size()-1;
+        int count = 0;
+        
+        while(low <= high){
+            int mid = low+(high-low)/2;
+            
+            
+            if(arr[mid] <= target){
+                low = mid+1;
+            }
+            else{
+                high = mid-1;
+            }
+        };
+        
+        return low;
+    }
+    
+      int leftmostOccurence(vector<int>& arr, int target ){
+        int low = 0, high = arr.size()-1;
+        int count = 0;
+        
+        while(low <= high){
+            int mid = low+(high-low)/2;
+            
+            
+            if(arr[mid] >= target){
+                high = mid-1;
+            }
+            else{
+                low = mid+1;
+            }
+        };
+        
+        return low;
+        
+        
+    }
+    
+    int countFreq(vector<int>& arr, int target) {
+        // code here
+        
+        return rightmostOccurence(arr,target) - leftmostOccurence(arr,target) ;
+    }
+};
