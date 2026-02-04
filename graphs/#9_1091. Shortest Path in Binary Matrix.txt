@@ -34,6 +34,9 @@ grid[i][j] is 0 or 1
 
 Solution(#1 => BFS)
 
+Intution:
+1.Do Bfs traversal in the graph and increase count for each level, for getting shortest path to reach the destination.
+
 class Solution {
 public:
     int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
@@ -52,7 +55,7 @@ public:
 
         while(!q.empty()){
             int size = q.size();
-            while(size--){
+            while(size--){ 
 
                 auto front = q.front();
                 q.pop();
