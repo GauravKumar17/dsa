@@ -1,0 +1,117 @@
+Given a boolean 2D matrix grid of size n * m. You have to find the number of distinct islands where a group of connected 1s (horizontally or vertically) forms an island. Two islands are considered to be distinct if and only if one island is not equal to another (not rotated or reflected).
+
+Example 1:
+
+Input:
+grid[][] = [[1, 1, 0, 0, 0],
+            [1, 1, 0, 0, 0],
+            [0, 0, 0, 1, 1],
+            [0, 0, 0, 1, 1]]
+Output: 1
+Explanation:
+grid[][] = [[1, 1, 0, 0, 0], 
+            [1, 1, 0, 0, 0], 
+            [0, 0, 0, 1, 1], 
+            [0, 0, 0, 1, 1]]
+Same colored islands are equal. We have 2 equal islands, so we have only 1 distinct island.
+
+Example 2:
+
+Input:
+grid[][] = [[1, 1, 0, 1, 1],
+            [1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1],
+            [1, 1, 0, 1, 1]]
+Output: 3
+Explanation:
+grid[][] = [[1, 1, 0, 1, 1], 
+            [1, 0, 0, 0, 0], 
+            [0, 0, 0, 0, 1], 
+            [1, 1, 0, 1, 1]]
+Same colored islands are equal.
+We have 4 islands, but 2 of them
+are equal, So we have 3 distinct islands.
+
+Your Task: You don't need to read or print anything. Your task is to complete the function countDistinctIslands() which takes the grid as an input parameter and returns the total number of distinct islands.
+
+Constraints:
+1 ≤ n, m ≤ 500
+grid[i][j] == 0 or grid[i][j] == 1
+
+
+Solution(#1 => DFS)
+
+Intution:
+1.Use No. of island question approaach.
+2. search for the connected components islands
+3. store each island in the set (to store each island store disatance of their node from the root node(from where island started i.e rooti & rootj))
+4. Island which are same will be uniquely store in the set.
+
+ex:
+1 1 0 0 0
+1 0 0 0 0    
+0 0 0 1 1
+0 0 0 1 0
+
+for 1st island = > root = {0,0} =>  distance of root from root => {0,0} - {0,0} = {0,0} -> push to vector ->[{0,0}]
+    distance of all its neighbours: {0,1} - {0,0} = {0,1} -> store in vector ->[{0,0},{0,1}]
+                                    {1,0} - {0,0} = {1,0} -> store in vector - >[{0,0},{0,1},{1,0}]
+    push the vector in the set. => {{{0,0},{0,1},{1,0}}};
+
+for 2nd island = > root = {3,2}  => distance of root from root => {3,2} - {3,2} = {0,0} -> push to vector ->[{0,0}]
+    distance of all its neighbours: {3,3} - {3,2} = {0,1} -> store in vector ->[{0,0},{0,1}]
+                                    {4,2} - {3,2} = {1,0} -> store in vector - >[{0,0},{0,1},{1,0}]
+    push the vector [{0,0},{0,1},{1,0}] in the set. => {{{0,1},{1,0}}}; // set will be unchanged as values are same
+
+Hence this way similar islands will be not pushed to vector and we can count distinct islands.
+
+
+
+
+class Solution {
+  public:
+    int m,n;
+    vector<pair<int,int>>directions = {{1,0},{-1,0},{0,1},{0,-1}};
+    
+    void dfs(vector<vector<int>>& grid,vector<vector<int>>&vis, int i, int j,int rooti,int rootj,vector<pair<int,int>>&v){
+        vis[i][j] = 1;
+        int idiff = i-rooti;
+        int jdiff = j-rootj;
+        
+        v.push_back({idiff,jdiff});
+        
+        for(auto &dir :directions){
+            int a = i+dir.first;
+            int b = j+dir.second;
+            
+            if(a>=0 && b>=0 && a<m && b<n && !vis[a][b] && grid[a][b] == 1){
+                dfs(grid,vis,a,b,rooti,rootj,v);
+            }
+        }
+        
+        
+        
+    }
+    int countDistinctIslands(vector<vector<int>>& grid) {
+        m = grid.size();
+        n = grid[0].size();
+        set<vector<pair<int,int>>>res;
+
+        
+        vector<vector<int>>vis(m,vector<int>(n,0));
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j] == 1 && !vis[i][j]){
+                    int rooti = i;
+                    int rootj = j;
+                    vector<pair<int,int>>v;
+                    dfs(grid,vis,i,j,rooti,rootj,v);
+                    res.insert(v);
+                }
+            }
+        }
+        
+        return res.size();
+        
+    }
+};
