@@ -39,7 +39,7 @@ Constraints:
 grid[i][j] == 0 or grid[i][j] == 1
 
 
-Solution(#1 => DFS)
+Solution(#1 => DFS) t.c => O(n*m) [loop] + O(n*m*4)[dfs] + O(log(size of set) ie, log(n*m)) => O(n*m)
 
 Intution:
 1.Use No. of island question approaach.

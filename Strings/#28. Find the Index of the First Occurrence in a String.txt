@@ -1,0 +1,86 @@
+Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+ 
+
+Example 1:
+
+Input: haystack = "sadbutsad", needle = "sad"
+Output: 0
+Explanation: "sad" occurs at index 0 and 6.
+The first occurrence is at index 0, so we return 0.
+Example 2:
+
+Input: haystack = "leetcode", needle = "leeto"
+Output: -1
+Explanation: "leeto" did not occur in "leetcode", so we return -1.
+ 
+
+Constraints:
+
+1 <= haystack.length, needle.length <= 104
+haystack and needle consist of only lowercase English characters.
+
+Solution(#1) => O(n) [Two pointers]
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        int i = 0, j = 0,idx = 0;
+        int m = haystack.size();
+        int n = needle.size();
+        while(i<m && j<n){
+            if(j==0){
+                idx = i;
+            }
+            if(haystack[i] == needle[j]){
+                i++;
+                j++;
+                if(j == n){
+                    return idx;
+                }
+            }
+            else{
+                i = i-j+1;  // clicked with example haystack = mississippi , needle = issip (use of i-j+1 instead of i++)
+                j=0;
+            }
+        }
+
+        return -1;
+        
+    }
+};
+
+solution(#2) = >using find() function
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+
+        if(haystack.find(needle)!= string::npos){
+            return haystack.find(needle);
+        }
+        return -1;
+        
+    }
+};
+
+solution(#3) => sliding window
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        int m = haystack.size();
+        int n = needle.size();
+
+        if (n == 0) return 0;
+
+        for (int i = 0; i <= m - n; i++) {
+            int j = 0;
+            while (j < n && haystack[i + j] == needle[j]) {
+                j++;
+            }
+            if (j == n) return i;
+        }
+        return -1;
+    }
+};

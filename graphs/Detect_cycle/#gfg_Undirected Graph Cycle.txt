@@ -1,0 +1,136 @@
+
+Given an undirected graph with V vertices and E edges, represented as a 2D vector edges[][], where each entry edges[i] = [u, v] denotes an edge between vertices u and v, determine whether the graph contains a cycle or not.
+
+Note: The graph can have multiple component.
+
+Examples:
+
+Input: V = 4, E = 4, edges[][] = [[0, 1], [0, 2], [1, 2], [2, 3]]
+Output: true
+Explanation: 
+ 
+1 -> 2 -> 0 -> 1 is a cycle.
+Input: V = 4, E = 3, edges[][] = [[0, 1], [1, 2], [2, 3]]
+Output: false
+Explanation: 
+ 
+No cycle in the graph.
+Constraints:
+1 ≤ V, E ≤ 105
+0 ≤ edges[i][0], edges[i][1] < V
+
+Solution(#1) => bfs t.c => O(V+ 2E)
+
+class Solution {
+  public:
+    bool bfs(int i,vector<int>&vis,vector<vector<int>>& adj){
+        vis[i] = 1;
+        queue<pair<int,int>>q;
+        q.push({i,-1}); // let -1 be the parent of the first node;
+        
+        while(!q.empty()){
+            auto front = q.front();
+            int node = front.first;
+            int parent = front.second;
+            q.pop();
+            
+            for(int x : adj[node]){
+                if(!vis[x]){
+                    vis[x] = 1;
+                    q.push({x,node});
+                }
+                else{ 
+
+                    //if some x is already visited and it if the visit has not come from
+                    //current parent, that it means it was earlier visited by some other parent
+                    //hence it is a cycle.
+
+                    if(parent != x){   //remember this line
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    bool isCycle(int V, vector<vector<int>>& edges) {
+        // Code here
+        vector<vector<int>>adj(V);
+        
+        for(int i=0;i<edges.size();i++){
+            adj[edges[i][0]].push_back(edges[i][1]);
+            adj[edges[i][1]].push_back(edges[i][0]);
+        }
+        
+        vector<int>vis(V,0);
+            
+            for(int i=0;i<V;i++){
+                bool res = false;
+                
+                if(vis[i] == 0){
+                    res = bfs(i,vis,adj);
+                }
+                
+                if(res){
+                    return true;
+                }
+                
+            }
+            return false;
+
+            
+        }
+    
+};
+
+
+Solution(#2) => dfs
+
+class Solution {
+  public:
+    bool dfs(int i,int parent,vector<int>&vis,vector<vector<int>>& adj){
+        vis[i] = 1;
+        for(int x : adj[i]){
+            if(vis[x] == 0){
+                if(dfs(x,i,vis,adj)) return true;
+            }
+            else{
+                if(x != parent){  //remember this line
+                    return true; 
+                }
+                
+            }
+        }
+        
+        return false;
+       
+    }
+    bool isCycle(int V, vector<vector<int>>& edges) {
+        vector<vector<int>>adj(V);
+        
+        for(int i=0;i<edges.size();i++){
+            adj[edges[i][0]].push_back(edges[i][1]);
+            adj[edges[i][1]].push_back(edges[i][0]);
+        }
+        
+        vector<int>vis(V,0);
+            
+            for(int i=0;i<V;i++){
+                bool res = false;
+                
+                if(vis[i] == 0){
+                    res = dfs(i,-1,vis,adj);
+                }
+                
+                if(res){
+                    return true;
+                }
+                
+            }
+            return false;
+
+            
+        }
+    
+};
+

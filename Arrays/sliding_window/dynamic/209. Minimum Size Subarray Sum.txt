@@ -24,7 +24,39 @@ Constraints:
 1 <= nums[i] <= 104
 
 
-Solution(#1)=> dynamic sliding window (t.c=O(n), s.c =O(1))
+
+
+Solution(#1) => sliding window (t.c=O(n), s.c =O(n))
+
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int n = nums.size();
+        int minlen = INT_MAX;
+        vector<int>ps(n+1,0);
+        for(int i=1;i<=n;i++){
+            ps[i] = ps[i-1] + nums[i-1];
+        }
+        
+        int i = 0, j=0;
+        while(i<n && j<n){
+            int sum = ps[j+1]-ps[i];
+            if(sum < target){
+                j++;
+            }
+            else{
+                int len = j-i+1;
+                minlen = min(minlen,len);
+                i++;
+            }
+        }
+
+        return (minlen == INT_MAX) ? 0:minlen;
+    }
+};
+
+
+Solution(#2)=> sliding window (t.c=O(n), s.c =O(1))
 
 Note:- //Although there is a nested loop, each pointer advances only forward 
 and never resets, so the total number of operations is linear.i.e(O(n))
