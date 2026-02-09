@@ -51,6 +51,7 @@ so that sorting can be done based on weight first and if weights are same for tw
 class Solution {
 public:
     int minCost(int n, vector<vector<int>>& edges) {
+        
         vector<vector<pair<int,int>>>adjList(n);
         int row = edges.size();
         

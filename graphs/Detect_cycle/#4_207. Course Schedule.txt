@@ -34,12 +34,12 @@ Solution(#1)=> DFS
 
 class Solution {
 public:
-     bool dfs(int i,int parent,vector<int>&vis,vector<int>&pathvis,vector<vector<int>>& adj){
+     bool dfs(int i,vector<int>&vis,vector<int>&pathvis,vector<vector<int>>& adj){
         vis[i] = 1;
         pathvis[i] = 1;
         for(int x : adj[i]){
             if(vis[x] == 0){
-                if(dfs(x,i,vis,pathvis,adj)) return true;
+                if(dfs(x,vis,pathvis,adj)) return true;
             }
             else{
                 if(pathvis[x] == 1){
@@ -65,7 +65,7 @@ public:
                 bool res = false;
                 
                 if(vis[i] == 0){
-                    if(dfs(i,-1,vis,pathvis,adj)) return false;
+                    if(dfs(i,vis,pathvis,adj)) return false;
                 }
                 
             }
