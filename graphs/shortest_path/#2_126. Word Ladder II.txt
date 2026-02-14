@@ -1,0 +1,138 @@
+A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
+
+Every adjacent pair of words differs by a single letter.
+Every si for 1 <= i <= k is in wordList. Note that beginWord does not need to be in wordList.
+sk == endWord
+Given two words, beginWord and endWord, and a dictionary wordList, return all the shortest transformation sequences from beginWord to endWord, or an empty list if no such sequence exists. Each sequence should be returned as a list of the words [beginWord, s1, s2, ..., sk].
+
+ 
+
+Example 1:
+
+Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
+Output: [["hit","hot","dot","dog","cog"],["hit","hot","lot","log","cog"]]
+Explanation: There are 2 shortest transformation sequences:
+"hit" -> "hot" -> "dot" -> "dog" -> "cog"
+"hit" -> "hot" -> "lot" -> "log" -> "cog"
+Example 2:
+
+Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log"]
+Output: []
+Explanation: The endWord "cog" is not in wordList, therefore there is no valid transformation sequence.
+ 
+
+Constraints:
+
+1 <= beginWord.length <= 5
+endWord.length == beginWord.length
+1 <= wordList.length <= 500
+wordList[i].length == beginWord.length
+beginWord, endWord, and wordList[i] consist of lowercase English letters.
+beginWord != endWord
+All the words in wordList are unique.
+The sum of all shortest transformation sequences does not exceed 105.
+
+
+Solution(#1) => BFS (MLE)
+
+Core Idea:
+
+Use BFS to explore transformations level by level.
+
+Store full paths in the queue.
+
+When endWord is found, collect only shortest length paths.
+
+🔹 Key Steps
+
+1️⃣ Convert wordList into unordered_set for O(1) lookup.
+
+2️⃣ Use: queue<vector<string>> q;
+        Each queue element stores a full transformation path.
+
+3️⃣ Level-wise processing:
+
+Track current level.
+
+Remove visited words after finishing a level.
+
+Ensures shortest paths only.
+
+4️⃣ For each word:
+
+Try replacing each character with 'a' → 'z'.
+
+If new word exists in set:
+
+Push new path into queue.
+
+Mark visited.
+
+5️⃣ If word == endWord:
+
+Add path to result.
+
+Only keep paths of same shortest size.
+
+🔹 Why Level-Based Removal?
+
+To allow:
+
+Same level words to reuse nodes
+
+Prevent revisiting in deeper levels
+
+class Solution {
+public:
+    vector<vector<string>> findLadders(string beginWord, string endWord,
+                                       vector<string>& wordList) {
+
+        unordered_set<string> s(wordList.begin(), wordList.end());
+        vector<vector<string>> res;
+        vector<string> vis;
+
+        queue<vector<string>> q;
+        q.push({beginWord});
+        vis.push_back(beginWord);
+        int level = 0;
+        while (!q.empty()) {
+            vector<string> vec = q.front();
+            q.pop();
+
+            if (vec.size() > level) { // new level
+                level++;
+                for (auto x : vis) { // remove the nodes of prev level from set
+                    s.erase(x);
+                }
+                vis.clear();
+            }
+            string word =
+                vec.back(); // newly added word adds are at the back of vector
+            if (word == endWord) {
+                if (!res.size()) {
+                    res.push_back(vec);
+                } else if (vec.size() ==
+                           res[0].size()) { // add only same shortest len vec's
+                    res.push_back(vec);
+                }
+            }
+            for (int i = 0; i < word.size(); i++) {
+                char original = word[i];
+                for (int j = 0; j < 26; j++) {
+                    word[i] = 'a' + j;
+                    if (s.find(word) != s.end()) {
+                        vec.push_back(word);
+                        q.push(vec);
+                        vis.push_back(word);
+                        vec.pop_back();
+                    }
+                }
+                word[i] = original;
+            }
+        }
+
+        return res;
+    }
+};
+
+Solution(#2) => 

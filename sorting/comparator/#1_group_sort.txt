@@ -1,0 +1,67 @@
+
+You are given an array of integers arr.
+
+Your task is to construct a 2D array such that:
+
+The first element of each row is a distinct integer value from the array.
+
+The second element of each row is the frequency of that integer in the array.
+
+After constructing this 2D array, sort it using the following rules:
+
+Sort by frequency in descending order.
+
+If two integers have the same frequency, sort them by their value in ascending order.
+
+Return the sorted 2D array.
+
+🔹 Example
+Input:
+arr = [3, 3, 1, 2, 2, 2]
+
+Explanation:
+
+1 appears 1 time
+
+2 appears 3 times
+
+3 appears 2 times
+
+Output:
+[
+  [2, 3],
+  [3, 2],
+  [1, 1]
+]
+
+🔹 Constraints (Typical)
+
+1 ≤ arr.length ≤ 10^5
+
+-10^9 ≤ arr[i] ≤ 10^9
+
+
+Solution(#1)
+
+vector<vector<int>> groupSort(vector<int> arr) {
+    vector<vector<int>>ans;
+    map<int ,int>mp;
+    for(int x:arr){
+        mp[x]++;
+    }
+    
+    for(auto &p: mp){
+        ans.push_back({p.first,p.second});
+    }
+    
+    sort(ans.begin(),ans.end(),[](auto &a, auto &b){
+        if(a[1] == b[1]){
+            return a[0] < b[0];
+        }
+        else{
+            return a[1] > b[1];
+        }
+    });
+    
+    return ans;
+}

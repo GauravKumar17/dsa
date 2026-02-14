@@ -29,7 +29,7 @@ beginWord, endWord, and wordList[i] consist of lowercase English letters.
 beginWord != endWord
 All the words in wordList are unique.
 
-Solution(#1) => BFS(t.c = O(m*n*26))
+Solution(#1) => Simple BFS(t.c = O(m*n*26))
 
 class Solution {
 public:
