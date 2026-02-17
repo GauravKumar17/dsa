@@ -48,7 +48,7 @@ Solution(#1) => Dijksta [t.c= O(e log V)]
 class Solution {
 public:
     int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst,int k) {
-        
+
         vector<vector<pair<int, int>>> adj(n);
         for (int i = 0; i < flights.size(); i++) {
             int u = flights[i][0];
@@ -62,9 +62,9 @@ public:
 
         priority_queue<pair<int, pair<int, int>>,
                        vector<pair<int, pair<int, int>>>,
-                       greater<pair<int, pair<int, int>>>>pq;
+                       greater<pair<int, pair<int, int>>>>pq;   // here a queue can also be used
 
-        pq.push({0, {0, src}});
+        pq.push({0, {0, src}});  // {count,{cost,src}}
         cost[src] = 0;
 
         while (!pq.empty()) {
