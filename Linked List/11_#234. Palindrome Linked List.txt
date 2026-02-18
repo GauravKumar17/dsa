@@ -1,0 +1,132 @@
+Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,2,1]
+Output: true
+Example 2:
+
+
+Input: head = [1,2]
+Output: false
+ 
+
+Constraints:
+
+The number of nodes in the list is in the range [1, 105].
+0 <= Node.val <= 9
+ 
+
+Follow up: Could you do it in O(n) time and O(1) space?
+
+
+Solution(Slow fast pointer and reverse) => T.c=O(n)
+
+/*
+class Node {
+  public:
+    int data;
+    Node *next;
+    Node(int x) {
+        data = x;
+        next = nullptr;
+    }
+};
+*/
+Node* reverse(Node* head){
+    Node * curr = head;
+    Node * fwd = curr;
+    Node*prev = NULL;
+
+    while(fwd != NULL){
+        fwd = curr->next;
+        curr ->next = prev;
+        prev = curr;
+        curr = fwd;
+    }
+
+    return prev;
+
+}
+
+bool isPalindrome(Node* head) {
+    Node* slow = head;
+    Node * fast = head;
+    while(fast && fast->next ){
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    slow = reverse(slow);
+    Node* temp = head;
+    Node* temp2 = slow;
+
+    while(temp2){
+        if(temp->data != temp2->data){
+            return false;
+        }
+        temp = temp->next;
+        temp2 = temp2->next;
+    }
+    return true;
+
+}
+
+Soution(#2) = > Recursion
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+// recursive function give O(n) space complexity whereas iterative reverse will give O(1) space complexity
+    ListNode* reverse(ListNode* &head){ 
+        if(head == NULL || head->next == NULL ){
+            return head;
+        }
+        ListNode* newHead = reverse(head->next);
+        head->next->next = head;
+        head->next = NULL;
+
+        return newHead;
+    }
+
+    bool isPalindrome(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+        //First find the middle node (in case of two middle nodes take first one)
+        while(fast->next!= NULL && fast->next->next != NULL ){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        //Reverse all the node after the middle node(i.e slow->next)
+        ListNode* newHead = reverse(slow->next); //reversing the second half will return a new head (the last node of linkedlist)
+        ListNode* temp = newHead; 
+        slow = head; // point slow poinnter to the head of original linked list
+
+        //Now Compare the linked list each node to the reversed second half each node , until reverse node ends.
+        while(temp!=NULL){
+            if(slow->val == temp->val){
+                slow = slow->next;
+                temp = temp->next;
+            }
+            else{
+                reverse(newHead); // Before returning undo the changes previously done by re-reversing the reversed part of the linked list
+                return false;
+            }
+        }
+        reverse(newHead); // Before returning undo the changes previously done by re-reversing the reversed part of the linked list
+        return true;
+
+    }
+};
