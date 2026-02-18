@@ -1,0 +1,103 @@
+You are organizing the International Kite Festival in Ahmedabad, Gujarat. Participants record their kite string lengths on measurement cards. Each card contains a sequence of single-digit numbers (0–9) written in reverse order (from centimeters to meters). These numbers represent string lengths for different kite categories.
+
+During the competition's grand finale, organizers must combine string lengths from two kites to create a special tandem flying category.
+
+However, there is a measurement rule:
+
+Each digit in the resulting length must be multiplied by a calibration factor k (to account for wind resistance).
+
+Only the last digit of each multiplication is kept (i.e., modulo 10 operation).
+
+📌 The measurement cards are represented as linked lists where each node contains a single digit.
+
+You must:
+
+Add the two lengths represented by the linked lists.
+
+Apply the calibration factor k to each digit of the sum.
+
+Keep only the last digit of each multiplication (digit * k % 10).
+
+Return the result as a new linked list in reverse order.
+
+⚠️ Important Notes
+
+Carry operations happen before applying the calibration factor.
+
+After multiplying by k, do not apply carry again.
+
+If sum of two lengths is 807 and k = 2:
+
+8 × 2 = 16 → keep 6
+
+0 × 2 = 0
+
+7 × 2 = 14 → keep 4
+
+Result becomes: [6, 0, 4]
+
+📘 Example 1
+Input:
+l1 = [2, 4, 3]
+l2 = [5, 6, 4]
+k = 2
+
+Explanation:
+
+Numbers represented:
+
+l1 = 342
+l2 = 465
+
+
+Addition:
+
+342 + 465 = 807
+
+
+Reverse form:
+
+[7, 0, 8]
+
+
+Apply calibration factor:
+
+7 × 2 = 14 → 4
+0 × 2 = 0
+8 × 2 = 16 → 6
+
+Output:
+[4, 0, 6]
+
+
+Solution(#1)
+
+
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2, int k) {
+    ListNode* temp = l1;
+    ListNode* temp2 = l2;
+
+    ListNode* dummy = new ListNode(-1);
+    ListNode* temp3 = dummy;
+    int carry = 0;
+    while(temp || temp2 || carry){
+         int sum = carry;
+         if(temp){
+            sum += temp->val;
+            temp = temp->next;
+         }
+         if(temp2){
+            sum += temp2->val;
+            temp2 = temp2->next;
+         }
+            carry = sum/10;;
+            sum = sum%10;
+         
+         int value = (sum *k )%10;
+        dummy ->next = new ListNode(value);
+        dummy = dummy->next;
+    
+    }
+    return temp3->next;
+
+}
