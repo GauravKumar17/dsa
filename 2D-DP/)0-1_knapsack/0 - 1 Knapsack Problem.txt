@@ -1,0 +1,86 @@
+Given two arrays, val[] and wt[], where each element represents the value and weight of an item respectively, and an integer W representing the maximum capacity of the knapsack (the total weight it can hold).
+
+The task is to put the items into the knapsack such that the total value obtained is maximum without exceeding the capacity W.
+
+Note: You can either include an item completely or exclude it entirely — fractional selection of items is not allowed. Each item is available only once.
+
+Examples :
+
+Input: W = 4, val[] = [1, 2, 3], wt[] = [4, 5, 1]
+Output: 3
+Explanation: Choose the last item, which weighs 1 unit and has a value of 3.
+Input: W = 3, val[] = [1, 2, 3], wt[] = [4, 5, 6] 
+Output: 0
+Explanation: Every item has a weight exceeding the knapsack's capacity (3).
+Input: W = 5, val[] = [10, 40, 30, 50], wt[] = [5, 4, 2, 3] 
+Output: 80
+Explanation: Choose the third item (value 30, weight 2) and the last item (value 50, weight 3) for a total value of 80.
+Constraints:
+1 ≤ val.size() = wt.size() ≤ 103
+1 ≤ W ≤ 103
+1 ≤ val[i] ≤ 103
+1 ≤ wt[i] ≤ 103
+
+Solution(#1) =>  Recursion + Memoization
+
+Time & Space Complexity
+
+Time: O(n × W)
+
+Space: O(n × W) (due to DP table)
+
+class Solution {
+public:
+    // dp[item][cap] will store:
+    // Maximum value we can obtain using items from 0..item
+    // with remaining capacity = cap
+    vector<vector<int>> dp;
+
+    int knap(int cap, int item, vector<int> &val, vector<int> &wt) {
+        
+        // 🔹 Base Case:
+        // If no items left OR capacity becomes 0,
+        // we cannot pick anything → profit = 0
+        if(item < 0 || cap == 0){
+            return 0;
+        }
+
+        // 🔹 Memoization Check:
+        // If this state is already computed, return it
+        if(dp[item][cap] != -1){
+            return dp[item][cap];
+        }
+
+        // 🔹 Case 1: If current item's weight fits in remaining capacity
+        if(wt[item] <= cap){
+
+            // Option 1: Do NOT take current item
+            int no = knap(cap, item - 1, val, wt);
+
+            // Option 2: Take current item
+            // Add its value and reduce capacity
+            int yes = val[item] + knap(cap - wt[item], item - 1, val, wt);
+
+            // Store and return the maximum of both choices
+            return dp[item][cap] = max(no, yes);
+        }
+        else{
+            // 🔹 Case 2: If current item's weight exceeds capacity
+            // We cannot take it → skip it
+            return dp[item][cap] = knap(cap, item - 1, val, wt);
+        }
+    }
+
+    int knapsack(int W, vector<int> &val, vector<int> &wt) {
+
+        int n = val.size();
+
+        // Initialize dp table with -1
+        // n rows (items 0 to n-1)
+        // W+1 columns (capacity 0 to W)
+        dp.assign(n, vector<int>(W + 1, -1));
+
+        // Start recursion from last item (n-1) with full capacity W
+        return knap(W, n - 1, val, wt);
+    }
+};
