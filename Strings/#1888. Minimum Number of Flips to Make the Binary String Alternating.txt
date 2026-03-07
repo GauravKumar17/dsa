@@ -1,0 +1,112 @@
+You are given a binary string s. You are allowed to perform two types of operations on the string in any sequence:
+
+Type-1: Remove the character at the start of the string s and append it to the end of the string.
+Type-2: Pick any character in s and flip its value, i.e., if its value is '0' it becomes '1' and vice-versa.
+Return the minimum number of type-2 operations you need to perform such that s becomes alternating.
+
+The string is called alternating if no two adjacent characters are equal.
+
+For example, the strings "010" and "1010" are alternating, while the string "0100" is not.
+ 
+
+Example 1:
+
+Input: s = "111000"
+Output: 2
+Explanation: Use the first operation two times to make s = "100011".
+Then, use the second operation on the third and sixth elements to make s = "101010".
+Example 2:
+
+Input: s = "010"
+Output: 0
+Explanation: The string is already alternating.
+Example 3:
+
+Input: s = "1110"
+Output: 1
+Explanation: Use the second operation on the second element to make s = "1010".
+ 
+
+Constraints:
+
+1 <= s.length <= 105
+s[i] is either '0' or '1'.
+
+Solution(#1) => t.c = O(n),s.c = O(n)
+
+class Solution {
+public:
+    int minFlips(string s) {
+        int n = s.size();
+        s = s + s;
+
+        string s1, s2;
+
+        for (int i = 0; i < 2 * n; i++) {
+            s1 += (i % 2 == 0) ? '1' : '0';
+            s2 += (i % 2 == 0) ? '0' : '1';
+        }
+
+        int flip1 = 0, flip2 = 0;
+        int i = 0, j = 0;
+        int minFlips = INT_MAX;
+
+        while (j < 2 * n) {
+            if (s[j] != s1[j])
+                flip1++;
+            if (s[j] != s2[j])
+                flip2++;
+
+            if (j - i + 1 > n) {
+                if (s[i] != s1[i])
+                    flip1--;
+                if (s[i] != s2[i])
+                    flip2--;
+                i++;
+            }
+
+            if (j - i + 1 == n) {
+                minFlips = min({minFlips, flip1, flip2});
+            }
+            j++;
+        }
+        return minFlips;
+    }
+};
+
+
+Solution(#2) = >more optimized on space t.c = O(n),s.c = O(1)
+
+Just remove the extra space used by even odd logic for zero and one , and do not format the input string , just use circular string method using (%n)
+
+class Solution {
+public:
+    int minFlips(string s) {
+        int n = s.size();
+
+        int flip1 = 0, flip2 = 0;
+        int i = 0, j = 0;
+        int minFlips = INT_MAX;
+
+        while (j < 2 * n) {
+            if (s[j % n] != ((j % 2 == 0) ? '0' : '1'))
+                flip1++;
+            if (s[j % n] != ((j % 2 == 0) ? '1' : '0'))
+                flip2++;
+
+            if (j - i + 1 > n) {
+                if (s[i % n] != ((i % 2 == 0) ? '0' : '1'))
+                    flip1--;
+                if (s[i % n] != ((i % 2 == 0) ? '1' : '0'))
+                    flip2--;
+                i++;
+            }
+
+            if (j - i + 1 == n) {
+                minFlips = min({minFlips, flip1, flip2});
+            }
+            j++;
+        }
+        return minFlips;
+    }
+};
