@@ -1,0 +1,138 @@
+You are given a string s consisting of lowercase English letters.
+
+In one operation, you can select any substring of s that is not the entire string and sort it in non-descending alphabetical order.
+
+Return the minimum number of operations required to make s sorted in non-descending order. If it is not possible, return -1.
+
+ 
+
+Example 1:
+
+Input: s = "dog"
+
+Output: 1
+
+Explanation:​​​​​​​
+
+Sort substring "og" to "go".
+Now, s = "dgo", which is sorted in ascending order. Thus, the answer is 1.
+Example 2:
+
+Input: s = "card"
+
+Output: 2
+
+Explanation:
+
+Sort substring "car" to "acr", so s = "acrd".
+Sort substring "rd" to "dr", making s = "acdr", which is sorted in ascending order. Thus, the answer is 2.
+Example 3:
+
+Input: s = "gf"
+
+Output: -1
+
+Explanation:
+
+It is impossible to sort s under the given constraints. Thus, the answer is -1.
+ 
+
+Constraints:
+
+1 <= s.length <= 105
+s consists of only lowercase English letters.
+
+
+Solution(#1) => O(n)
+
+Intutuion:
+
+Case 1
+String already sorted = return 0
+
+Case 2
+String is not sorted but length is 2 = return -1
+
+There is no way we can sort strings like "gf" where first character is max and last character is min
+
+Case 3
+Now we'll find the min_character and max_character from the original string.
+
+min character in whole string = mn
+max character in whole string = mx
+if first character is mn, s[0]=mn then we can simply sort s[1,n-1]
+if last character is mx, s[n-1]=mx then we can simply sort s[0,n-2]
+
+So if first is mn or last is mx then answer is 1.
+
+Case 4(Tricky case)
+If first is mx and last is mn , this is a tricky case
+
+Worst case scenario for this is having 3 operations
+
+sort prefix
+sort suffix
+Sort middle
+After sorting prefix -> mx character will come in middle segment
+
+After sorting suffix -> mx character which came in middle will go to last and now mn character will also come in middle segment
+
+Sort middle -> mn character in middle will come to first
+
+But in this -> What if the middle segment already has a mx or mn character, then answer will be 2
+
+Why ?
+Let's say first character is mx and last character is mn.
+
+If middle segment is having mx character already
+
+If we sort suffix -> mn will come in middle and the last character will be mx since there is already a mx in middle
+Then if we sort middle -> mn will come in first position and we already have mx in last position so
+
+If middle segment is having mn character already
+
+If we sort prefix -> mx will go to middle segment and first character will be mn since there is already mn in the middle
+If we sort middle -> mx will go to last position and mn at last position will fall in correct place i.e 2nd index since 1st index already has mn from middle position.
+
+Hence for case where first character is mx and last character is mn,
+we check if middle segment has mx or mn in it -> If it does, answer is 2
+
+Else answer is worst case 3
+
+Case 5
+If first is mx or if last is mn or any other case -> Can always be done in 2 operations.
+
+Sort prefix+ sort middle or sort suffix+sort middle
+
+class Solution {
+public:
+    int minOperations(string s) {
+        int n = s.size();
+        if(is_sorted(s.begin(),s.end())) return 0;
+        if(n==2) return -1;
+
+        char minEl = 'z',maxEl = 'a';
+
+        for(char x:s){
+            minEl = min(x,minEl);
+            maxEl = max(x,maxEl);
+        }
+
+        if(s[0] == minEl || s[n-1] == maxEl){
+            return 1;
+        }
+        else if(s[0] == maxEl && s[n-1] == minEl){
+            for(int i=1;i<n-1;i++){
+                if(s[i] == maxEl || s[i] == minEl){
+                    return 2;
+                }
+            }
+            return 3;
+        }
+        
+
+        return 2;
+        
+
+    }
+};
