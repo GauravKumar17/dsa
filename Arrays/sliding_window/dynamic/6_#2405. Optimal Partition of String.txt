@@ -1,0 +1,78 @@
+Given a string s, partition the string into one or more substrings such that the characters in each substring are unique. That is, no letter appears in a single substring more than once.
+
+Return the minimum number of substrings in such a partition.
+
+Note that each character should belong to exactly one substring in a partition.
+
+ 
+
+Example 1:
+
+Input: s = "abacaba"
+Output: 4
+Explanation:
+Two possible partitions are ("a","ba","cab","a") and ("ab","a","ca","ba").
+It can be shown that 4 is the minimum number of substrings needed.
+Example 2:
+
+Input: s = "ssssss"
+Output: 6
+Explanation:
+The only valid partition is ("s","s","s","s","s","s").
+ 
+
+Constraints:
+
+1 <= s.length <= 105
+s consists of only English lowercase letters.
+
+Solution(#1) => using map
+
+class Solution {
+public:
+    int partitionString(string s) {
+        int count = 0;
+        int l=0;
+        int n = s.size();
+        unordered_map<char,int>mp;
+
+        for(int r=0;r<n;r++){
+            if(mp.find(s[r]) == mp.end()){
+                mp[s[r]]++;
+                continue;
+            }
+            count++;
+            mp.clear();
+            mp[s[r]]++;
+        }
+
+        if(!mp.empty()){
+            count++;
+        }
+
+        return count;
+    }
+};
+
+Solution(#2) = > using vector of size 26 (more optimal space wise)
+
+class Solution {
+public:
+    int partitionString(string s) {
+        int count = 1;
+        int l=0;
+        int n = s.size();
+        unordered_map<char,int>mp;
+        vector<int>v(26,0);
+
+        for(int r=0;r<n;r++){
+            if(v[s[r] - 'a'] != 0){
+                count++;
+                fill(v.begin(),v.end(),0);
+            }
+            v[s[r] -'a']++;
+        }
+
+        return count;
+    }
+};
